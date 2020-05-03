@@ -13,7 +13,7 @@ RUN wget http://www.haproxy.org/download/2.0/src/haproxy-2.0.14.tar.gz && \
     tar zxf haproxy-2.0.14.tar.gz
 RUN wget https://bootstrap.pypa.io/get-pip.py && \
     python /build/get-pip.py && \
-    pip install awscli
+    pip install awscli boto3
 
 
 WORKDIR /build/openssl-1.1.1g
