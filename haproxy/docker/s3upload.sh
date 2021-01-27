@@ -19,4 +19,4 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-aws s3 cp /build/haproxy-2.0.14/haproxy s3://$1/2.0.14/haproxy --profile "${2:-default}"
+aws s3 cp /build/haproxy-2.2.8/haproxy s3://$1/2.2.8/haproxy --profile "${2:-default}"
