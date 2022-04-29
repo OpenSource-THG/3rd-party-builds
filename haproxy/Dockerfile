@@ -25,29 +25,29 @@ WORKDIR /build
 
 RUN yum update -y && \
     yum install -y make gcc perl pcre-devel zlib-devel wget perl-Test-Harness perl-Module-Load-Conditional perl-core make gcc gcc-c++ pcre-devel readline-devel systemd-devel zlib-devel
-RUN wget https://www.openssl.org/source/openssl-1.1.1i.tar.gz && \
-    tar zxf openssl-1.1.1i.tar.gz
-RUN wget https://www.lua.org/ftp/lua-5.4.2.tar.gz && \
-    tar zxf lua-5.4.2.tar.gz
-RUN wget http://www.haproxy.org/download/2.2/src/haproxy-2.2.8.tar.gz && \
-    tar zxf haproxy-2.2.8.tar.gz
-RUN wget https://bootstrap.pypa.io/2.7/get-pip.py && \
+RUN wget https://www.openssl.org/source/openssl-1.1.1l.tar.gz && \
+    tar zxf openssl-1.1.1l.tar.gz
+RUN wget https://www.lua.org/ftp/lua-5.4.3.tar.gz && \
+    tar zxf lua-5.4.3.tar.gz
+RUN wget http://www.haproxy.org/download/2.4/src/haproxy-2.4.4.tar.gz && \
+    tar zxf haproxy-2.4.4.tar.gz
+RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && \
     python /build/get-pip.py && \
     pip install awscli boto3
 
 
-WORKDIR /build/openssl-1.1.1i
+WORKDIR /build/openssl-1.1.1l
 RUN ./config --prefix=/usr/local/ssl --libdir=lib no-shared zlib && \
     make && \
     make test && \
     make install
 
-WORKDIR /build/lua-5.4.2
+WORKDIR /build/lua-5.4.3
 RUN make linux test && \
     make linux install
 
-WORKDIR /build/haproxy-2.2.8
-RUN make TARGET=linux-glibc USE_PTHREAD_PSHARED=1 USE_OPENSSL=1 USE_PCRE=1 USE_SYSTEMD=1 USE_LIBCRYPT=1 USE_GETADDRINFO=1 USE_TFO=1 USE_NS=1 USE_ZLIB=1 USE_LUA=1 SSL_LIB=/usr/local/ssl/lib SSL_INC=/usr/local/ssl/include LUA_LIB=/usr/local/lib/ LUA_INC=/usr/local/include/ EXTRA_OBJS="contrib/prometheus-exporter/service-prometheus.o"
+WORKDIR /build/haproxy-2.4.4
+RUN make TARGET=linux-glibc USE_PTHREAD_PSHARED=1 USE_OPENSSL=1 USE_PCRE=1 USE_SYSTEMD=1 USE_LIBCRYPT=1 USE_GETADDRINFO=1 USE_TFO=1 USE_NS=1 USE_ZLIB=1 USE_LUA=1 USE_PROMEX=1 SSL_LIB=/usr/local/ssl/lib SSL_INC=/usr/local/ssl/include LUA_LIB=/usr/local/lib/ LUA_INC=/usr/local/include/
 
 WORKDIR /build
 COPY docker/* ./
