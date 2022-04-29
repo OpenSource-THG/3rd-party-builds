@@ -18,7 +18,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-FROM centos:7
+FROM centos:7 as build-stage
 LABEL Josh Blease<Josh.Blease@thehutgroup.com>
 
 WORKDIR /build
@@ -49,5 +49,5 @@ RUN make linux test && \
 WORKDIR /build/haproxy-2.4.4
 RUN make TARGET=linux-glibc USE_PTHREAD_PSHARED=1 USE_OPENSSL=1 USE_PCRE=1 USE_SYSTEMD=1 USE_LIBCRYPT=1 USE_GETADDRINFO=1 USE_TFO=1 USE_NS=1 USE_ZLIB=1 USE_LUA=1 USE_PROMEX=1 SSL_LIB=/usr/local/ssl/lib SSL_INC=/usr/local/ssl/include LUA_LIB=/usr/local/lib/ LUA_INC=/usr/local/include/
 
-WORKDIR /build
-COPY docker/* ./
+FROM scratch AS export-stage
+COPY --from=build-stage /build/haproxy-2.0.14/haproxy /
