@@ -31,9 +31,6 @@ RUN wget https://www.lua.org/ftp/lua-5.4.3.tar.gz && \
     tar zxf lua-5.4.3.tar.gz
 RUN wget http://www.haproxy.org/download/2.4/src/haproxy-2.4.4.tar.gz && \
     tar zxf haproxy-2.4.4.tar.gz
-RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && \
-    python /build/get-pip.py && \
-    pip install awscli boto3
 
 
 WORKDIR /build/openssl-1.1.1l
