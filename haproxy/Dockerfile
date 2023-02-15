@@ -25,15 +25,15 @@ WORKDIR /build
 
 RUN yum update -y && \
     yum install -y make gcc perl pcre-devel zlib-devel wget perl-Test-Harness perl-Module-Load-Conditional perl-core make gcc gcc-c++ pcre-devel readline-devel systemd-devel zlib-devel
-RUN wget https://www.openssl.org/source/openssl-1.1.1n.tar.gz && \
-    tar zxf openssl-1.1.1n.tar.gz
+RUN wget https://www.openssl.org/source/openssl-1.1.1t.tar.gz && \
+    tar zxf openssl-1.1.1t.tar.gz
 RUN wget https://www.lua.org/ftp/lua-5.4.4.tar.gz && \
     tar zxf lua-5.4.4.tar.gz
 RUN wget http://www.haproxy.org/download/2.4/src/haproxy-2.4.22.tar.gz && \
     tar zxf haproxy-2.4.22.tar.gz
 
 
-WORKDIR /build/openssl-1.1.1n
+WORKDIR /build/openssl-1.1.1t
 RUN ./config --prefix=/usr/local/ssl --libdir=lib no-shared zlib && \
     make && \
     make test && \
