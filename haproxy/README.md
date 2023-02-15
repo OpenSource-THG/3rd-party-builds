@@ -2,7 +2,7 @@
 This container will build HAProxy from source along with OpenSSL and Lua
 
 ## Execution
-If you're using podman, you need to ssh into your podman machine 
+If you're using podman, you need to ssh into your podman machine using
 ```podman machine ssh``` 
 and navigate into this directory from there before running the next step. 
 
