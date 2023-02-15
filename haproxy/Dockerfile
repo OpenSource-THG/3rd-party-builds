@@ -30,7 +30,7 @@ RUN wget https://www.openssl.org/source/openssl-1.1.1n.tar.gz && \
 RUN wget https://www.lua.org/ftp/lua-5.4.4.tar.gz && \
     tar zxf lua-5.4.4.tar.gz
 RUN wget http://www.haproxy.org/download/2.4/src/haproxy-2.4.22.tar.gz && \
-    tar zxf haproxy-2.4.15.tar.gz
+    tar zxf haproxy-2.4.22.tar.gz
 
 
 WORKDIR /build/openssl-1.1.1n
@@ -47,4 +47,4 @@ WORKDIR /build/haproxy-2.4.22
 RUN make TARGET=linux-glibc USE_PTHREAD_PSHARED=1 USE_OPENSSL=1 USE_PCRE=1 USE_SYSTEMD=1 USE_LIBCRYPT=1 USE_GETADDRINFO=1 USE_TFO=1 USE_NS=1 USE_ZLIB=1 USE_LUA=1 USE_PROMEX=1 SSL_LIB=/usr/local/ssl/lib SSL_INC=/usr/local/ssl/include LUA_LIB=/usr/local/lib/ LUA_INC=/usr/local/include/
 
 FROM scratch AS export-stage
-COPY --from=build-stage /build/haproxy-2.4.15/haproxy /
+COPY --from=build-stage /build/haproxy-2.4.22/haproxy /
