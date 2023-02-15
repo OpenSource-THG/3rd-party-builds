@@ -29,7 +29,7 @@ RUN wget https://www.openssl.org/source/openssl-3.0.8.tar.gz && \
     tar zxf openssl-3.0.8.tar.gz
 RUN wget https://www.lua.org/ftp/lua-5.4.4.tar.gz && \
     tar zxf lua-5.4.4.tar.gz
-RUN wget http://www.haproxy.org/download/2.4/src/haproxy-2.7.3.tar.gz && \
+RUN wget http://www.haproxy.org/download/2.7/src/haproxy-2.7.3.tar.gz && \
     tar zxf haproxy-2.7.3.tar.gz
 
 
