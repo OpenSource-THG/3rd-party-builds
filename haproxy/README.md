@@ -10,4 +10,4 @@ If you've mounted the Users directory to your podman machine then you'll probabl
 ```cd /Users/[your machine username]/[path to this directory]```
 
 Build the container which will compile, build and output the haproxy executable:
-`docker build .`
+`docker build -o . .`
