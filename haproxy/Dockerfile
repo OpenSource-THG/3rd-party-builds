@@ -1,5 +1,5 @@
 #
-# Copyright 2020 The Hut Group
+# Copyright 2023 The Hut Group
 # 
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -25,15 +25,15 @@ WORKDIR /build
 
 RUN yum update -y && \
     yum install -y make gcc perl pcre-devel zlib-devel wget perl-Test-Harness perl-Module-Load-Conditional perl-core make gcc gcc-c++ pcre-devel readline-devel systemd-devel zlib-devel
-RUN wget https://www.openssl.org/source/openssl-1.1.1n.tar.gz && \
-    tar zxf openssl-1.1.1n.tar.gz
+RUN wget https://www.openssl.org/source/openssl-3.0.8.tar.gz && \
+    tar zxf openssl-3.0.8.tar.gz
 RUN wget https://www.lua.org/ftp/lua-5.4.4.tar.gz && \
     tar zxf lua-5.4.4.tar.gz
-RUN wget http://www.haproxy.org/download/2.4/src/haproxy-2.4.15.tar.gz && \
-    tar zxf haproxy-2.4.15.tar.gz
+RUN wget http://www.haproxy.org/download/2.7/src/haproxy-2.7.3.tar.gz && \
+    tar zxf haproxy-2.7.3.tar.gz
 
 
-WORKDIR /build/openssl-1.1.1n
+WORKDIR /build/openssl-3.0.8
 RUN ./config --prefix=/usr/local/ssl --libdir=lib no-shared zlib && \
     make && \
     make test && \
@@ -43,8 +43,8 @@ WORKDIR /build/lua-5.4.4
 RUN make linux test && \
     make linux install
 
-WORKDIR /build/haproxy-2.4.15
+WORKDIR /build/haproxy-2.7.3
 RUN make TARGET=linux-glibc USE_PTHREAD_PSHARED=1 USE_OPENSSL=1 USE_PCRE=1 USE_SYSTEMD=1 USE_LIBCRYPT=1 USE_GETADDRINFO=1 USE_TFO=1 USE_NS=1 USE_ZLIB=1 USE_LUA=1 USE_PROMEX=1 SSL_LIB=/usr/local/ssl/lib SSL_INC=/usr/local/ssl/include LUA_LIB=/usr/local/lib/ LUA_INC=/usr/local/include/
 
 FROM scratch AS export-stage
-COPY --from=build-stage /build/haproxy-2.4.15/haproxy /
+COPY --from=build-stage /build/haproxy-2.7.3/haproxy /
