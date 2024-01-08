@@ -1,5 +1,5 @@
 #
-# Copyright 2020 The Hut Group
+# Copyright 2023 The Hut Group
 # 
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -18,33 +18,33 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-FROM centos:7 as build-stage
+FROM rockylinux:9 as build-stage
 LABEL Josh Blease<Josh.Blease@thehutgroup.com>
 
 WORKDIR /build
 
 RUN yum update -y && \
     yum install -y make gcc perl pcre-devel zlib-devel wget perl-Test-Harness perl-Module-Load-Conditional perl-core make gcc gcc-c++ pcre-devel readline-devel systemd-devel zlib-devel
-RUN wget https://www.openssl.org/source/openssl-1.1.1n.tar.gz && \
-    tar zxf openssl-1.1.1n.tar.gz
+RUN wget https://github.com/quictls/openssl/archive/refs/tags/OpenSSL_1_1_1t-quic1.tar.gz && \
+    tar zxf OpenSSL_1_1_1t-quic1.tar.gz
 RUN wget https://www.lua.org/ftp/lua-5.4.4.tar.gz && \
     tar zxf lua-5.4.4.tar.gz
-RUN wget http://www.haproxy.org/download/2.4/src/haproxy-2.4.15.tar.gz && \
-    tar zxf haproxy-2.4.15.tar.gz
+RUN wget https://www.haproxy.org/download/2.8/src/haproxy-2.8.3.tar.gz && \
+    tar zxf haproxy-2.8.3.tar.gz
 
 
-WORKDIR /build/openssl-1.1.1n
-RUN ./config --prefix=/usr/local/ssl --libdir=lib no-shared zlib && \
+WORKDIR /build/openssl-OpenSSL_1_1_1t-quic1
+RUN mkdir -p /opt/quictls && \
+    ./config --libdir=lib --prefix=/opt/quictls no-shared no-pinshared && \
     make && \
-    make test && \
     make install
 
 WORKDIR /build/lua-5.4.4
 RUN make linux test && \
     make linux install
 
-WORKDIR /build/haproxy-2.4.15
-RUN make TARGET=linux-glibc USE_PTHREAD_PSHARED=1 USE_OPENSSL=1 USE_PCRE=1 USE_SYSTEMD=1 USE_LIBCRYPT=1 USE_GETADDRINFO=1 USE_TFO=1 USE_NS=1 USE_ZLIB=1 USE_LUA=1 USE_PROMEX=1 SSL_LIB=/usr/local/ssl/lib SSL_INC=/usr/local/ssl/include LUA_LIB=/usr/local/lib/ LUA_INC=/usr/local/include/
+WORKDIR /build/haproxy-2.8.3
+RUN make TARGET=linux-glibc USE_PTHREAD_PSHARED=1 USE_OPENSSL=1 USE_PCRE=1 USE_SYSTEMD=1 USE_LIBCRYPT=1 USE_GETADDRINFO=1 USE_TFO=1 USE_NS=1 USE_ZLIB=1 USE_LUA=1 USE_PROMEX=1 USE_QUIC=1 USE_OPENSSL=1 SSL_LIB=/opt/quictls/lib SSL_INC=/opt/quictls/include LDFLAGS="-Wl,-rpath,/opt/quictls/lib" LUA_LIB=/usr/local/lib/ LUA_INC=/usr/local/include/ ADDLIB="-Wl,-rpath,/opt/quictls/lib"
 
 FROM scratch AS export-stage
-COPY --from=build-stage /build/haproxy-2.4.15/haproxy /
+COPY --from=build-stage /build/haproxy-2.8.3/haproxy /
